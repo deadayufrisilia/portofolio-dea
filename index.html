@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dea Dayu Frisilia | Portfolio</title>
+    
+    <!-- Fonts: Plus Jakarta Sans (Body), Syne (Display/Heading for a unique artsy look) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb',   // Blue 600
+                        accent: '#FF6B6B',    // Coral/Pink for punchy highlights
+                        secondary: '#0f172a', // Slate 900
+                        surface: '#ffffff',   
+                        background: '#f8fafc',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'marquee-reverse': 'marquee-reverse 25s linear infinite',
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(2deg)' },
+                        },
+                        'marquee': {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        'marquee-reverse': {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0%)' },
+                        },
+                        'blob': {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #f8fafc;
+            /* Pola titik-titik modern untuk background */
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 32px 32px;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism khusus */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* Gaya asimetris untuk desain yang unik */
+        .shape-asymmetric {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            transition: all 0.5s ease-in-out;
+        }
+        .shape-asymmetric:hover {
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+
+        /* Efek Hover Bento yang Catchy */
+        .bento-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bento-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 30px -5px rgba(37, 99, 235, 0.1);
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+
+        /* Teks gradasi tebal */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(135deg, #2563eb, #8b5cf6, #FF6B6B);
+            background-size: 200% 200%;
+            animation: gradient-shift 5s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Tumpukan Kartu Sticky (Experience) */
+        .sticky-card-container {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+        .sticky-card {
+            position: sticky;
+            top: 120px;
+            transform-origin: top center;
+            transition: transform 0.3s;
+        }
+
+        /* Chat Widget UI */
+        #chat-widget {
+            transform: translateY(120%) scale(0.9);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        #chat-widget.active {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+        .typing-indicator span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #94a3b8;
+            border-radius: 50%;
+            animation: typing 1s infinite;
+            margin: 0 2px;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        /* Utility untuk menyembunyikan scrollbar tapi bisa discroll */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="text-slate-600 font-sans antialiased selection:bg-primary selection:text-white">
+
+    <!-- Floating Navbar -->
+    <div class="fixed top-0 left-0 w-full z-50 flex justify-center pt-6 px-4">
+        <nav class="glass rounded-[2rem] px-6 py-3 flex justify-between items-center w-full max-w-6xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            
+            <!-- Logo / Name (Kiri) -->
+            <a href="#" class="font-display font-bold text-xl text-secondary hover:text-primary transition-colors flex items-center gap-2 group">
+                <span class="w-8 h-8 rounded-xl bg-secondary text-white flex items-center justify-center text-sm group-hover:bg-primary transition-colors transform group-hover:rotate-12">DF</span>
+                <span class="tracking-tight">Dea <span class="text-primary">Frisilia</span></span>
+            </a>
+
+            <!-- Desktop Menu (Tengah) -->
+            <div class="hidden lg:flex items-center space-x-1 bg-slate-100/50 rounded-full px-2 py-1 border border-slate-200">
+                <a href="#about" class="px-4 py-2 rounded-full text-sm font-semibold text-slate-600 hover:bg-white hover:text-primary hover:shadow-sm transition-all">About</a>
+                <a href="#education" class="px-4 py-2 rounded-full text-sm font-semibold text-slate-600 hover:bg-white hover:text-primary hover:shadow-sm transition-all">Education</a>
+                <a href="#experience" class="px-4 py-2 rounded-full text-sm font-semibold text-slate-600 hover:bg-white hover:text-primary hover:shadow-sm transition-all">Experience</a>
+                <a href="#projects" class="px-4 py-2 rounded-full text-sm font-semibold text-slate-600 hover:bg-white hover:text-primary hover:shadow-sm transition-all">Projects</a>
+                <a href="#skills" class="px-4 py-2 rounded-full text-sm font-semibold text-slate-600 hover:bg-white hover:text-primary hover:shadow-sm transition-all">Skills</a>
+            </div>
+
+            <!-- Profile & CTA (Kanan) -->
+            <div class="hidden md:flex items-center gap-4">
+                <a href="#contact" class="px-6 py-2.5 rounded-full text-sm font-bold text-white bg-secondary hover:bg-primary shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 border-2 border-transparent hover:border-blue-300">
+                    Let's Talk
+                </a>
+                <!-- Foto Profil di Sebelah Kanan Navbar -->
+                <div class="relative group cursor-pointer">
+                    <img src="https://i.ibb.co.com/yF2m92Tb/Foto-dea.jpg" onerror="this.src='https://placehold.co/100x100/e2e8f0/94a3b8?text=Foto'" alt="Dea Dayu Frisilia" class="w-11 h-11 rounded-full border-2 border-white shadow-md object-cover transform group-hover:scale-110 transition-transform">
+                    <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center gap-4">
+                <img src="https://i.ibb.co.com/yF2m92Tb/Foto-dea.jpg" onerror="this.src='https://placehold.co/100x100/e2e8f0/94a3b8?text=Foto'" alt="Dea" class="w-9 h-9 rounded-full border border-white shadow-sm object-cover">
+                <button type="button" id="mobile-menu-btn" class="text-slate-600 hover:text-primary p-2 focus:outline-none bg-slate-100 rounded-full">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Mobile Menu Dropdown -->
+    <div class="md:hidden fixed top-24 left-4 right-4 z-40 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-100 hidden opacity-0 transition-all duration-300" id="mobile-menu">
+        <div class="p-4 flex flex-col space-y-2">
+            <a href="#about" class="px-4 py-3 rounded-xl text-base font-bold text-slate-700 hover:bg-blue-50 hover:text-primary">About</a>
+            <a href="#education" class="px-4 py-3 rounded-xl text-base font-bold text-slate-700 hover:bg-blue-50 hover:text-primary">Education</a>
+            <a href="#experience" class="px-4 py-3 rounded-xl text-base font-bold text-slate-700 hover:bg-blue-50 hover:text-primary">Experience & Projects</a>
+            <a href="#skills" class="px-4 py-3 rounded-xl text-base font-bold text-slate-700 hover:bg-blue-50 hover:text-primary">Skills</a>
+            <a href="#contact" class="px-4 py-3 mt-2 rounded-xl text-base font-bold text-white bg-primary text-center shadow-md">Let's Talk</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
+        <!-- Background Orbs -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+            <div class="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-blue-400/20 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-blob"></div>
+            <div class="absolute top-[20%] right-[-10%] w-[35rem] h-[35rem] bg-indigo-400/20 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-blob animation-delay-2000"></div>
+            <div class="absolute bottom-[-20%] left-[20%] w-[40rem] h-[40rem] bg-pink-300/20 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-blob animation-delay-4000"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Kiri: Teks -->
+                <div class="lg:col-span-7 flex flex-col justify-center text-center lg:text-left pt-10 lg:pt-0">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-slate-200 shadow-sm mb-6 w-fit mx-auto lg:mx-0 backdrop-blur-sm">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+                        </span>
+                        <span class="text-xs font-bold tracking-wider text-slate-700 uppercase">Communication Enthusiast</span>
+                    </div>
+
+                    <h1 class="font-display text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-secondary mb-4 leading-[1.1] break-words relative z-20">
+                        Dea Dayu <span class="text-gradient">Frisilia.</span>
+                    </h1>
+
+                    <div class="bg-slate-100/80 rounded-2xl p-4 mb-8 border border-slate-200 w-fit mx-auto lg:mx-0 inline-block transform -rotate-1 mt-4">
+                        <p class="text-base font-display font-bold text-primary italic">
+                            "Learning. Creating. Connecting. Growing."
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="#contact" class="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white bg-primary rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(37,99,235,0.4)]">
+                            <span class="relative flex items-center gap-2">
+                                Hubungi Saya <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        </a>
+                        <a href="#experience" class="inline-flex items-center justify-center px-8 py-4 font-bold text-secondary bg-white border-2 border-slate-200 rounded-full hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 hover:scale-105 shadow-sm">
+                            Lihat Karya Saya
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Kanan: Visual Playful -->
+                <div class="lg:col-span-5 relative hidden md:block">
+                    <!-- Lingkaran Dekoratif Utama -->
+                    <div class="relative w-full aspect-square max-w-[450px] mx-auto">
+                        <!-- Background Blob -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-200 to-indigo-100 shape-asymmetric animate-spin-slow"></div>
+                        
+                        <!-- Gambar Profil -->
+                        <div class="absolute inset-4 overflow-hidden shape-asymmetric bg-white border-4 border-white shadow-xl flex items-center justify-center p-2 z-10">
+                            <img src="https://i.ibb.co.com/yF2m92Tb/Foto-dea.jpg" onerror="this.src='https://placehold.co/600x800/e2e8f0/94a3b8?text=Foto'" alt="Dea Frisilia" class="w-full h-full object-cover rounded-3xl">
+                        </div>
+
+                        <!-- Floating Badges (Sangat Unik) -->
+                        <div class="absolute top-10 -left-6 bg-white px-4 py-2 rounded-2xl shadow-lg border border-slate-100 flex items-center gap-2 animate-float z-20 transform -rotate-6">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-primary flex items-center justify-center"><i class="fas fa-bullhorn"></i></div>
+                            <span class="font-bold text-sm text-slate-800">Public Relations</span>
+                        </div>
+
+                        <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-lg border border-slate-100 flex items-center gap-2 animate-float z-20">
+                            <span class="flex -space-x-2">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-blue-500 flex justify-center items-center text-white text-xs"><i class="fas fa-heart"></i></div>
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-pink-500 flex justify-center items-center text-white text-xs"><i class="fas fa-comment"></i></div>
+                            </span>
+                            <span class="font-bold text-sm text-slate-800 ml-1">Social Campaign</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider Marquee -->
+    <div class="bg-secondary py-4 transform -rotate-2 scale-105 border-y border-slate-800 shadow-xl overflow-hidden my-12 relative z-20">
+        <div class="flex animate-marquee whitespace-nowrap opacity-90">
+            <!-- Group 1 -->
+            <div class="flex items-center gap-8 px-4 font-display font-bold text-white text-lg tracking-widest uppercase">
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Public Relations</span>
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Content Creation</span>
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Social Media Strategy</span>
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Public Speaking</span>
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Event Management</span>
+            </div>
+            <!-- Group 2 (Duplicate) -->
+            <div class="flex items-center gap-8 px-4 font-display font-bold text-white text-lg tracking-widest uppercase">
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Public Relations</span>
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Content Creation</span>
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Social Media Strategy</span>
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Public Speaking</span>
+                <span><i class="fas fa-star text-accent text-sm mx-2"></i> Event Management</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section (Bento Grid) -->
+    <section id="about" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-extrabold text-secondary mb-4">Mengenal Lebih Dekat.</h2>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6">
+                
+                <!-- Main Bio -->
+                <div class="bg-white rounded-[2rem] p-8 md:p-10 border border-slate-200 shadow-sm bento-hover relative overflow-hidden group">
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-50 group-hover:bg-blue-100 transition-colors"></div>
+                    
+                    <div class="w-14 h-14 bg-primary text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-md transform -rotate-3">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    
+                    <p class="text-slate-600 text-lg leading-relaxed mb-4 relative z-10">
+                        Saya adalah mahasiswa S1 Ilmu Komunikasi Universitas Bengkulu yang memiliki ketertarikan pada komunikasi, public relations, content creation, dan media sosial. Saya senang mengubah ide menjadi pesan yang informatif, kreatif, dan relevan bagi audiens.
+                    </p>
+                    <p class="text-slate-600 text-lg leading-relaxed relative z-10">
+                        Selama berkuliah, saya aktif terlibat dalam organisasi, kepemimpinan, dan berbagai proyek komunikasi. Pengalaman tersebut membantu saya mengembangkan kemampuan komunikasi, koordinasi tim, pembuatan konten, serta kemampuan adaptasi bekerja dengan berbagai karakter dan lingkungan.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Scholarship Section -->
+    <section id="education" class="py-12 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="font-display text-4xl md:text-5xl font-extrabold text-secondary mb-4">Pendidikan & Beasiswa.</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Main Education Card (Span 2 cols) -->
+                <div class="md:col-span-2 bg-white rounded-[2rem] p-8 md:p-10 border border-slate-200 shadow-sm bento-hover relative overflow-hidden group">
+                    <!-- Decor -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+                    
+                    <div class="w-16 h-16 bg-blue-100 text-primary rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    
+                    <h3 class="font-display text-2xl md:text-3xl font-bold text-secondary mb-1">Universitas Bengkulu</h3>
+                    <p class="text-primary font-bold text-lg mb-6">Program Studi S1 Ilmu Komunikasi</p>
+                    
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full text-sm font-bold text-slate-600 border border-slate-200">
+                            <i class="far fa-calendar-alt text-slate-400"></i> 2024 - Sekarang
+                        </div>
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full text-sm font-bold text-green-700 border border-green-200 shadow-sm">
+                            <i class="fas fa-star text-green-500"></i> IPK: 3.94 / 4.00
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                        <h4 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2">Bidang Minat</h4>
+                        <p class="text-slate-600 font-medium">Public Relations, Komunikasi Digital, Studi Media, dan Komunikasi Publik.</p>
+                    </div>
+                </div>
+
+                <!-- Scholarships Column -->
+                <div class="md:col-span-1 flex flex-col gap-6">
+                    
+                    <!-- Scholarship 1 -->
+                    <div class="flex-1 bg-secondary text-white rounded-[2rem] p-6 border border-slate-800 shadow-lg bento-hover relative overflow-hidden group">
+                        <div class="absolute -right-6 -bottom-6 text-6xl text-white/5 font-black transform -rotate-12 group-hover:scale-110 transition-transform"><i class="fas fa-award"></i></div>
+                        
+                        <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-yellow-400 mb-4 border border-white/20">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h4 class="font-display text-xl font-bold mb-1">Bright Scholarship</h4>
+                        <p class="text-blue-300 font-semibold text-sm mb-3">Batch 10 - YBM BRILIAN</p>
+                        <div class="inline-block px-3 py-1 bg-white/10 rounded-full text-xs font-bold text-slate-300 backdrop-blur-sm">
+                            Tingkat Nasional (2024)
+                        </div>
+                    </div>
+
+                    <!-- Scholarship 2 -->
+                    <div class="flex-1 bg-blue-600 text-white rounded-[2rem] p-6 border border-blue-500 shadow-lg bento-hover relative overflow-hidden group">
+                        <div class="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-colors"></div>
+                        
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white mb-4 shadow-inner">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <h4 class="font-display text-xl font-bold mb-1">Smart Scholarship</h4>
+                        <p class="text-blue-200 font-semibold text-sm mb-3">YBM BRILIAN</p>
+                        <div class="inline-block px-3 py-1 bg-black/10 rounded-full text-xs font-bold text-blue-50 backdrop-blur-sm">
+                            Tingkat Nasional (2023)
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section (Sticky Stack Cards) -->
+    <section id="experience" class="py-24 bg-white relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <span class="text-primary font-bold tracking-wider uppercase text-sm bg-blue-50 px-4 py-2 rounded-full">Perjalanan Karier</span>
+                <h2 class="font-display text-4xl md:text-5xl font-extrabold text-secondary mt-6">Experience & Leadership</h2>
+            </div>
+
+            <!-- Sticky Card Container -->
+            <div class="sticky-card-container space-y-12 pb-32">
+                
+                <!-- Card 1 -->
+                <div class="sticky-card bg-secondary text-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl border border-slate-800" style="top: 120px; z-index: 10;">
+                    <div class="flex flex-col md:flex-row justify-between md:items-start gap-6">
+                        <div class="md:w-3/4">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-bold mb-4 backdrop-blur-sm border border-white/10">
+                                <span class="w-2 h-2 rounded-full bg-green-400"></span> 2026 - Sekarang
+                            </div>
+                            <h3 class="font-display text-3xl font-bold mb-2">Kepala Dinas Pemberdayaan Perempuan</h3>
+                            <p class="text-blue-300 font-semibold text-lg mb-6">BEM FISIP KBM Universitas Bengkulu</p>
+                            <ul class="space-y-3 text-slate-300">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-asterisk text-accent mt-1 text-xs"></i> 
+                                    <span>Memimpin dan mengoordinasikan program pemberdayaan perempuan & advokasi.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-asterisk text-accent mt-1 text-xs"></i> 
+                                    <span>Menginisiasi program MERETAP (Menyuarakan Empati Perempuan) & BIPERSIP.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-asterisk text-accent mt-1 text-xs"></i> 
+                                    <span>Mengelola strategi konten digital edukatif pada akun Instagram @pp_bemfisip.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/4 flex justify-end">
+                            <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                                <i class="fas fa-users text-2xl text-blue-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="sticky-card bg-blue-600 text-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl border border-blue-500" style="top: 160px; z-index: 20;">
+                    <div class="flex flex-col md:flex-row justify-between md:items-start gap-6">
+                        <div class="md:w-3/4">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-black/10 rounded-full text-xs font-bold mb-4 backdrop-blur-sm border border-black/10">
+                                2025
+                            </div>
+                            <h3 class="font-display text-3xl font-bold mb-2">Sekretaris II Kementerian Luar Negeri</h3>
+                            <p class="text-blue-200 font-semibold text-lg mb-6">BEM KBM Universitas Bengkulu</p>
+                            <ul class="space-y-3 text-blue-50">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-white mt-1 text-sm"></i> 
+                                    <span>Mengelola tata kelola administrasi resmi dan puluhan surat birokrasi.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-white mt-1 text-sm"></i> 
+                                    <span>Memfasilitasi alur koordinasi serta diseminasi informasi strategis kampus.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/4 flex justify-end">
+                            <div class="w-16 h-16 rounded-full bg-black/10 flex items-center justify-center border border-black/20">
+                                <i class="fas fa-file-signature text-2xl text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="sticky-card bg-white text-slate-800 rounded-[2.5rem] p-8 md:p-12 shadow-2xl border border-slate-200" style="top: 200px; z-index: 30;">
+                    <div class="flex flex-col md:flex-row justify-between md:items-start gap-6">
+                        <div class="md:w-3/4">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-xs font-bold text-slate-500 mb-4 border border-slate-200">
+                                2024 - 2026
+                            </div>
+                            <h3 class="font-display text-3xl font-bold text-secondary mb-2">Sekretaris</h3>
+                            <p class="text-primary font-semibold text-lg mb-6">Bright Scholarship Batch 10 Universitas Bengkulu</p>
+                            <ul class="space-y-3 text-slate-600">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-primary mt-1 text-sm"></i> 
+                                    <span>Mengoordinasikan manajemen arsip kegiatan, administrasi beasiswa, dan komunikasi internal bagi seluruh penerima manfaat.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-primary mt-1 text-sm"></i> 
+                                    <span>Berperan aktif menyusun laporan pertanggungjawaban program kerja secara akurat dan tepat waktu kepada YBM BRILIAN.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/4 flex justify-end">
+                            <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                                <i class="fas fa-folder-open text-2xl text-slate-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="sticky-card bg-indigo-900 text-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl border border-indigo-800" style="top: 240px; z-index: 40;">
+                    <div class="flex flex-col md:flex-row justify-between md:items-start gap-6">
+                        <div class="md:w-3/4">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-bold mb-4 backdrop-blur-sm border border-white/10">
+                                2025
+                            </div>
+                            <h3 class="font-display text-3xl font-bold mb-2">Anggota Divisi Pendidikan & Pelatihan (Diklat)</h3>
+                            <p class="text-indigo-300 font-semibold text-lg mb-6">UKM P3M KBM Universitas Bengkulu</p>
+                            <ul class="space-y-3 text-slate-300">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-asterisk text-accent mt-1 text-xs"></i> 
+                                    <span>Berkontribusi dalam perencanaan dan operasional program pelatihan riset ilmiah (Scientific Communication School).</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-asterisk text-accent mt-1 text-xs"></i> 
+                                    <span>Berperan dalam upaya meningkatkan kapasitas penalaran dan kemampuan riset anggota.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/4 flex justify-end">
+                            <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                                <i class="fas fa-flask text-2xl text-indigo-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 5 -->
+                <div class="sticky-card bg-slate-100 text-slate-800 rounded-[2.5rem] p-8 md:p-12 shadow-2xl border border-slate-300" style="top: 280px; z-index: 50;">
+                    <div class="flex flex-col md:flex-row justify-between md:items-start gap-6">
+                        <div class="md:w-3/4">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full text-xs font-bold text-slate-500 mb-4 border border-slate-200">
+                                2024 - 2025
+                            </div>
+                            <h3 class="font-display text-3xl font-bold text-secondary mb-2">Anggota Divisi Keputrian</h3>
+                            <p class="text-pink-600 font-semibold text-lg mb-6">Intellectual Moslem Community (IMC) FISIP UNIB</p>
+                            <ul class="space-y-3 text-slate-600">
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-pink-500 mt-1 text-sm"></i> 
+                                    <span>Mengorganisasi pelaksanaan kajian berkala terkait isu-isu perempuan dan keislaman.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-check-circle text-pink-500 mt-1 text-sm"></i> 
+                                    <span>Menyusun dan mengelola forum diskusi pemberdayaan mahasiswi di lingkungan kampus.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/4 flex justify-end">
+                            <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm">
+                                <i class="fas fa-venus text-2xl text-pink-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects & Social Campaigns Section -->
+    <section id="projects" class="py-24 relative z-10 bg-slate-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div>
+                    <h2 class="font-display text-4xl md:text-5xl font-extrabold text-secondary mb-4">Proyek & Kampanye Sosial.</h2>
+                    <p class="text-slate-500 text-lg max-w-xl">Membangun kepedulian melalui komunikasi yang berdampak.</p>
+                </div>
+            </div>
+
+            <!-- Project Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project 1 -->
+                <div class="group bg-white rounded-[2rem] p-6 shadow-sm hover:shadow-xl border border-slate-200 transition-all duration-300 hover:-translate-y-2">
+                    <!-- Gallery Layout for Dokumentasi -->
+                    <div class="h-48 rounded-3xl mb-6 overflow-hidden relative grid grid-cols-2 gap-2 bg-slate-100">
+                        <div class="overflow-hidden h-full w-full">
+                            <img src="https://i.ibb.co.com/b59Q41zz/DSCF3882.jpg" alt="Dokumentasi Pantai Berkas 1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="overflow-hidden h-full w-full">
+                            <img src="https://i.ibb.co.com/MyzLc6rP/DSCF3858.jpg" alt="Dokumentasi Pantai Berkas 2" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                    </div>
+                    <div class="inline-block px-3 py-1 bg-blue-50 text-primary text-xs font-bold rounded-full mb-3">2025</div>
+                    <h3 class="font-display text-2xl font-bold text-secondary mb-3 leading-tight group-hover:text-primary transition-colors">Kampanye Lingkungan Pantai Berkas</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Merancang strategi komunikasi pengelolaan sampah dan menginisiasi instalasi tempat sampah berbasis material daur ulang.</p>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="group bg-white rounded-[2rem] p-6 shadow-sm hover:shadow-xl border border-slate-200 transition-all duration-300 hover:-translate-y-2">
+                    <div class="h-48 rounded-3xl mb-6 overflow-hidden relative">
+                        <img src="https://i.ibb.co.com/sJ2qs4Mc/Whats-App-Image-2026-09-16-at-15-54-41.jpg" alt="Dokumentasi Sosialisasi Beasiswa SMAN 7" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-full mb-3">SMAN 7 Bengkulu</div>
+                    <h3 class="font-display text-2xl font-bold text-secondary mb-3 leading-tight group-hover:text-indigo-600 transition-colors">Sosialisasi Beasiswa & Galang Dana</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Diseminasi informasi beasiswa pendidikan ke ratusan siswa dan memfasilitasi penggalangan dana kemanusiaan.</p>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="group bg-white rounded-[2rem] p-6 shadow-sm hover:shadow-xl border border-slate-200 transition-all duration-300 hover:-translate-y-2">
+                    <div class="h-48 rounded-3xl mb-6 overflow-hidden relative">
+                        <img src="https://i.ibb.co.com/jZ6DR2hT/Whats-App-Image-2026-09-16-at-17-10-19.jpg" alt="Dokumentasi Distribusi Paket Pendidikan SDN 32" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="inline-block px-3 py-1 bg-pink-50 text-pink-600 text-xs font-bold rounded-full mb-3">SDN 32 Bengkulu</div>
+                    <h3 class="font-display text-2xl font-bold text-secondary mb-3 leading-tight group-hover:text-pink-600 transition-colors">Distribusi Paket Pendidikan</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Mendistribusikan paket sarana pendidikan dari YBM BRILiaN kepada siswa yang membutuhkan di SDN 32 Bengkulu.</p>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="group bg-white rounded-[2rem] p-6 shadow-sm hover:shadow-xl border border-slate-200 transition-all duration-300 hover:-translate-y-2">
+                    <div class="h-48 rounded-3xl mb-6 overflow-hidden relative grid grid-cols-2 gap-2 bg-slate-100">
+                        <div class="overflow-hidden h-full w-full">
+                            <img src="https://i.ibb.co.com/Hpq68Wcm/Whats-App-Image-2026-09-16-at-16-09-25.jpg" alt="Dokumentasi Galang Dana NTT 1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="overflow-hidden h-full w-full">
+                            <img src="https://i.ibb.co.com/GQZTsYMS/Whats-App-Image-2026-09-16-at-16-12-55.jpg" alt="Dokumentasi Galang Dana NTT 2" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                    </div>
+                    <div class="inline-block px-3 py-1 bg-amber-50 text-amber-600 text-xs font-bold rounded-full mb-3">2026</div>
+                    <h3 class="font-display text-2xl font-bold text-secondary mb-3 leading-tight group-hover:text-amber-600 transition-colors">Penggalangan Dana Bencana NTT</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Berkontribusi dalam penggalangan dana sosial kolaboratif (Bright Scholarship, KKN 07 UMB, HIMATIKA UNIB) untuk masyarakat terdampak bencana alam NTT.</p>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="group bg-white rounded-[2rem] p-6 shadow-sm hover:shadow-xl border border-slate-200 transition-all duration-300 hover:-translate-y-2">
+                    <div class="h-48 rounded-3xl mb-6 overflow-hidden relative">
+                        <img src="https://i.ibb.co.com/4R0WdGWp/DSC05193.jpg" alt="Host Alumni Podcast Inspiratif (API)" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="inline-block px-3 py-1 bg-purple-50 text-purple-600 text-xs font-bold rounded-full mb-3">2026 • FISIP UNIB</div>
+                    <h3 class="font-display text-2xl font-bold text-secondary mb-3 leading-tight group-hover:text-purple-600 transition-colors">Host — Alumni Podcast Inspiratif (API)</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Menjadi host dalam episode "Mewujudkan Masyarakat dan Pembangunan Inklusif Disabilitas" bersama Irna Liza Yuliastuty, S.Sos., dengan memandu diskusi mengenai isu masyarakat dan pembangunan inklusif.</p>
+                </div>
+            </div>
+
+            <!-- Achievements Banner (Neo-brutalism inspired) -->
+            <div class="mt-16 bg-secondary text-white rounded-[2rem] p-8 md:p-12 relative overflow-hidden shadow-2xl">
+                <!-- Decorative Elements -->
+                <div class="absolute -right-10 -top-10 text-9xl text-white/5 font-black transform rotate-12 pointer-events-none">AWARD</div>
+                
+                <h3 class="font-display text-3xl md:text-4xl font-extrabold mb-10 relative z-10 text-center md:text-left">Highlight Prestasi</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                    <div class="border-l-2 border-slate-700 pl-6 hover:border-primary transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center mb-4 text-yellow-400"><i class="fas fa-trophy"></i></div>
+                        <h4 class="font-bold text-lg mb-2">Juara 3 Esai Nasional</h4>
+                        <p class="text-sm text-slate-400">VO FEST 1.0, Universitas Bina Insan (2026)</p>
+                    </div>
+                    <div class="border-l-2 border-slate-700 pl-6 hover:border-primary transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center mb-4 text-blue-400"><i class="fas fa-book"></i></div>
+                        <h4 class="font-bold text-lg mb-2">Penulis Buku Nasional</h4>
+                        <p class="text-sm text-slate-400">"Dari Nol ke Goal, Mimpi Gratisan Ala Telisik" (2025)</p>
+                    </div>
+                    <div class="border-l-2 border-slate-700 pl-6 hover:border-primary transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center mb-4 text-pink-400"><i class="fas fa-medal"></i></div>
+                        <h4 class="font-bold text-lg mb-2">Top 15 Finalis QRIS</h4>
+                        <p class="text-sm text-slate-400">Jelajah Budaya Indonesia, Bank Indonesia (2025)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 bg-white text-center flex flex-col justify-center overflow-hidden">
+        <h2 class="font-display text-4xl font-extrabold text-secondary mb-12">My Skills</h2>
+        
+        <div class="max-w-5xl mx-auto px-4 w-full flex flex-wrap justify-center gap-4">
+            <!-- Badges dengan tampilan tebal (bubbly) -->
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fas fa-comments text-primary"></i> Public Relations
+            </div>
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fas fa-microphone text-indigo-500"></i> Public Speaking
+            </div>
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fas fa-hashtag text-pink-500"></i> Social Media Strategy
+            </div>
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fas fa-calendar-alt text-green-500"></i> Content Planning
+            </div>
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fas fa-pen-nib text-yellow-500"></i> Copywriting
+            </div>
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fas fa-paint-brush text-cyan-500"></i> Canva
+            </div>
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fas fa-video text-slate-800"></i> CapCut
+            </div>
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fas fa-file-word text-orange-500"></i> Microsoft Office
+            </div>
+            <div class="px-6 py-4 bg-white border-2 border-slate-200 rounded-[2rem] text-slate-700 font-bold shadow-[0_4px_0_rgb(226,232,240)] hover:shadow-[0_0_0_rgb(226,232,240)] hover:translate-y-1 transition-all cursor-default flex items-center gap-2">
+                <i class="fab fa-google text-blue-500"></i> Google Workspace
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-primary relative overflow-hidden">
+        <!-- Abstract Shapes -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-white rounded-[3rem] p-8 md:p-14 shadow-2xl flex flex-col md:flex-row gap-12 items-center">
+                
+                <!-- Info Kiri -->
+                <div class="w-full md:w-5/12">
+                    <h2 class="font-display text-4xl md:text-5xl font-extrabold text-secondary mb-6 leading-tight">Mari Mulai<br>Sesuatu yang Hebat.</h2>
+                    <p class="text-slate-500 text-lg mb-10">Punya tawaran kolaborasi atau ingin berdiskusi? Jangan ragu untuk menghubungi saya.</p>
+
+                    <div class="space-y-4">
+                        <!-- Instagram -->
+                        <a href="https://www.instagram.com/deadyf_?igsi=MWxsa3IzYTUxaThoZg==" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-pink-500 hover:shadow-md transition-all group cursor-pointer">
+                            <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 group-hover:bg-pink-500 group-hover:text-white transition-colors duration-300">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Instagram</p>
+                                <p class="text-base font-bold text-secondary group-hover:text-pink-600 transition-colors">@deadyf_</p>
+                            </div>
+                        </a>
+
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/in/dea-dayu-frisilia" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-blue-500 hover:shadow-md transition-all group cursor-pointer">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                <i class="fab fa-linkedin-in text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">LinkedIn</p>
+                                <p class="text-base font-bold text-secondary group-hover:text-blue-700 transition-colors">Dea Dayu Frisilia</p>
+                            </div>
+                        </a>
+
+                        <!-- Email -->
+                        <a href="mailto:deadayufrisilia@gmail.com" class="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-primary hover:shadow-md transition-all group cursor-pointer">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                                <i class="fas fa-envelope text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Email</p>
+                                <p class="text-base font-bold text-secondary group-hover:text-primary transition-colors">deadayufrisilia@gmail.com</p>
+                            </div>
+                        </a>
+
+                        <!-- Lokasi -->
+                        <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                <i class="fas fa-map-marker-alt text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Lokasi</p>
+                                <p class="text-base font-bold text-secondary">Bengkulu, Indonesia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Kanan -->
+                <div class="w-full md:w-7/12">
+                    <form class="space-y-5" onsubmit="event.preventDefault(); alert('Pesan simulasi terkirim!');">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <input type="text" placeholder="Nama Lengkap" required class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-primary focus:bg-white outline-none transition-all font-medium">
+                            </div>
+                            <div>
+                                <input type="email" placeholder="Email Address" required class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-primary focus:bg-white outline-none transition-all font-medium">
+                            </div>
+                        </div>
+                        <div>
+                            <textarea rows="4" placeholder="Tulis pesan atau ide Anda di sini..." required class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-primary focus:bg-white outline-none transition-all resize-none font-medium"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-secondary hover:bg-primary text-white font-bold py-4 rounded-2xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 text-lg flex items-center justify-center gap-2">
+                            Kirim Pesan <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-secondary text-slate-400 py-8 text-center border-t border-slate-800">
+        <p class="font-medium">
+            &copy; <span id="year"></span> Dea Dayu Frisilia. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- AI Chat Assistant Widget -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        
+        <!-- Window Chat -->
+        <div id="chat-widget" class="bg-white w-80 sm:w-[350px] rounded-3xl shadow-2xl border border-slate-200 mb-4 flex flex-col overflow-hidden origin-bottom-right h-[450px]">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-primary to-blue-500 p-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center relative">
+                        <i class="fas fa-robot"></i>
+                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm leading-tight">AI Assistant</h4>
+                        <p class="text-xs text-blue-100">Ask about Dea's Portofolio</p>
+                    </div>
+                </div>
+                <button id="close-chat" class="text-white/70 hover:text-white transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            
+            <!-- Chat Area -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-slate-50 flex flex-col gap-3 text-sm no-scrollbar">
+                <!-- Bot Message -->
+                <div class="flex gap-2 max-w-[85%]">
+                    <div class="w-8 h-8 rounded-full bg-primary text-white flex-shrink-0 flex items-center justify-center text-xs"><i class="fas fa-robot"></i></div>
+                    <div class="bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-tl-sm px-4 py-2 shadow-sm">
+                        Halo! Saya asisten AI representatif Dea. Ada yang ingin kamu ketahui tentang pengalaman, skill, atau proyek Dea?
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Input Area -->
+            <div class="p-3 bg-white border-t border-slate-100 flex items-center gap-2">
+                <input type="text" id="chat-input" placeholder="Tanya sesuatu..." class="flex-1 bg-slate-100 rounded-full px-4 py-2 outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium border border-transparent focus:border-primary/30">
+                <button id="send-btn" class="w-10 h-10 bg-primary hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-md transition-colors flex-shrink-0">
+                    <i class="fas fa-paper-plane text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button id="chat-toggle" class="w-14 h-14 bg-secondary hover:bg-primary text-white rounded-full shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-all duration-300 relative group border-2 border-white">
+            <i class="fas fa-comment-dots"></i>
+            <span class="absolute -top-1 -right-1 flex h-4 w-4">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-4 w-4 bg-accent border-2 border-white"></span>
+            </span>
+            
+            <!-- Tooltip -->
+            <div class="absolute right-full mr-4 bg-white text-slate-800 text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap border border-slate-100">
+                Tanya AI tentang Dea!
+            </div>
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            if(menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                setTimeout(() => { menu.classList.remove('opacity-0'); menu.classList.add('opacity-100'); }, 10);
+            } else {
+                menu.classList.remove('opacity-100'); menu.classList.add('opacity-0');
+                setTimeout(() => menu.classList.add('hidden'), 300);
+            }
+        });
+
+        // --- AI Chat Logic (Gemini API Integration) ---
+        const chatToggle = document.getElementById('chat-toggle');
+        const closeChat = document.getElementById('close-chat');
+        const chatWidget = document.getElementById('chat-widget');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        let chatHistory = [];
+        
+        // System Prompt: Contextualize the AI
+        const systemPrompt = `Kamu adalah Asisten AI untuk portofolio Dea Dayu Frisilia. Jawab pertanyaan pengunjung secara ringkas, ramah, dan profesional. 
+Gunakan data berikut: 
+- Dea mahasiswi S1 Ilmu Komunikasi Universitas Bengkulu (IPK 3.94).
+- Keahlian: PR, Public Speaking, Social Media, Content Planning, Copywriting, Canva, CapCut.
+- Organisasi: Kadis Pemberdayaan Perempuan BEM FISIP (Program MERETAP, BIPERSIP), Sekretaris II Kemenlu BEM KBM, Sekretaris Bright Scholarship, UKM P3M, IMC.
+- Proyek: Kampanye Pantai Berkas, Sosialisasi Beasiswa SMAN 7, Distribusi Paket Pendidikan SDN 32 Bengkulu, Galang Dana NTT, Host Alumni Podcast Inspiratif (API).
+- Prestasi: Juara 3 Esai VO FEST, Penulis Buku "Dari Nol Ke Goal", Finalis QRIS BI.
+Hanya gunakan bahasa Indonesia. Jangan mengarang informasi.`;
+
+        // Toggle Widget
+        chatToggle.addEventListener('click', () => chatWidget.classList.add('active'));
+        closeChat.addEventListener('click', () => chatWidget.classList.remove('active'));
+
+        function appendMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex gap-2 max-w-[85%] ${sender === 'user' ? 'ml-auto flex-row-reverse' : ''} animate-[float_0.3s_ease-out]`;
+            
+            const avatar = sender === 'user' ? 
+                `<div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex-shrink-0 flex items-center justify-center text-xs"><i class="fas fa-user"></i></div>` : 
+                `<div class="w-8 h-8 rounded-full bg-primary text-white flex-shrink-0 flex items-center justify-center text-xs"><i class="fas fa-robot"></i></div>`;
+            
+            const bubbleClasses = sender === 'user' ? 
+                'bg-secondary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' : 
+                'bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-tl-sm px-4 py-2 shadow-sm';
+            
+            msgDiv.innerHTML = `
+                ${avatar}
+                <div class="${bubbleClasses}">${text}</div>
+            `;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = `flex gap-2 max-w-[85%]`;
+            typingDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-primary text-white flex-shrink-0 flex items-center justify-center text-xs"><i class="fas fa-robot"></i></div>
+                <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm typing-indicator flex items-center h-[38px]">
+                    <span></span><span></span><span></span>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTyping() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) typingIndicator.remove();
+        }
+
+        async function handleSend() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            
+            appendMessage(text, 'user');
+            chatInput.value = '';
+            showTyping();
+
+            // Prepare Payload for Gemini
+            chatHistory.push({ role: "user", parts: [{ text: text }] });
+            
+            const payload = {
+                contents: chatHistory,
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            const apiKey = ""; // Diisi runtime oleh Canvas / isi manual jika diexport
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                // Jika API Key kosong (di luar Canvas), tampilkan mock response
+                if(apiKey === "" && !window.location.hostname.includes("google")) {
+                    setTimeout(() => {
+                        removeTyping();
+                        const mockResponse = "Ini adalah simulasi respons AI karena API Key belum dimasukkan. Di lingkungan nyata, saya akan merespons pertanyaan Anda berdasarkan profil Dea!";
+                        appendMessage(mockResponse, 'bot');
+                        chatHistory.push({ role: "model", parts: [{ text: mockResponse }] });
+                    }, 1500);
+                    return;
+                }
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                removeTyping();
+
+                if (result.candidates && result.candidates[0].content) {
+                    const reply = result.candidates[0].content.parts[0].text;
+                    appendMessage(reply, 'bot');
+                    chatHistory.push(result.candidates[0].content);
+                } else {
+                    appendMessage("Maaf, terjadi kesalahan saat memproses permintaan.", 'bot');
+                }
+            } catch (error) {
+                removeTyping();
+                console.error(error);
+                appendMessage("Maaf, koneksi ke AI gagal. (Catatan: Pastikan API Key valid jika di luar Canvas).", 'bot');
+            }
+        }
+
+        sendBtn.addEventListener('click', handleSend);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+
+    </script>
+</body>
+</html>
